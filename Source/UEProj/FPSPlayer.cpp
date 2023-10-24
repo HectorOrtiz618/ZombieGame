@@ -25,6 +25,10 @@ AFPSPlayer::AFPSPlayer()
 	FPArms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FPS Arms"));
 	FPArms->SetupAttachment(Camera);
 
+	ReservedAmmo.Add(EAmmoType::EAT_9MM, 0);
+	ReservedAmmo.Add(EAmmoType::EAT_SHELLS, 0);
+	ReservedAmmo.Add(EAmmoType::EAT_AR, 0);
+
 	//ReservedAmmo;
 	Health = 100;
 	MaxHealth = 100;
@@ -50,6 +54,7 @@ void AFPSPlayer::BeginPlay()
 	CurrentCapsuleHalfHeight = StandingCapsuleHalfHeight;
 	bCrouched = false;
 	bCrouchButtonPressed = false;
+
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -180,6 +185,56 @@ void AFPSPlayer::Attack()
 	if (GetWorld()->LineTraceSingleByChannel(WeaponHitResult, Start, BulletEnd, ECollisionChannel::ECC_Visibility))
 	{
 		DrawDebugLine(GetWorld(), Start, End, FColor::Emerald, false, 5.f);
+	}
+}
+void AFPSPlayer::AddWeapon(AWeaponBase* Weapon, EWeaponType WeaponType)
+{
+	//get weapon type and chek if it exist in inventory, if yess add it, if not add ammo
+	switch (WeaponType)
+	{
+	case EWeaponType::EWT_Knife:
+		if (!WeaponSlot1)
+		{
+			WeaponSlot1 = Weapon;
+			CurrentWeapon = WeaponSlot1;
+		}
+		break;
+	case EWeaponType::EWT_Pistol:
+		if (!WeaponSlot2)
+		{
+			WeaponSlot2 = Weapon;
+			CurrentWeapon = WeaponSlot2;
+		}
+		else
+		{
+			ReservedAmmo[EAmmoType::EAT_9MM] += Weapon->GetCurrentRoundsInMag();
+		}
+		break;
+	case EWeaponType::EWT_PumpShotgun:
+		if (!WeaponSlot3)
+		{
+			WeaponSlot3 = Weapon;
+			CurrentWeapon = WeaponSlot3;
+		}
+		else
+		{
+			ReservedAmmo[EAmmoType::EAT_SHELLS] += Weapon->GetCurrentRoundsInMag();
+		}
+		break;
+	case EWeaponType::EWT_Rifle:
+		if (!WeaponSlot4)
+		{
+			WeaponSlot4 = Weapon;
+			CurrentWeapon = WeaponSlot4;
+		}
+		else
+		{
+			ReservedAmmo[EAmmoType::EAT_AR] += Weapon->GetCurrentRoundsInMag();
+		}
+		break;
+	default:
+		break;
+
 	}
 }
 

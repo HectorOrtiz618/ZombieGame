@@ -2,6 +2,7 @@
 
 
 #include "WeaponBase.h"
+#include "FPSPlayer.h"
 
 AWeaponBase::AWeaponBase()
 {
@@ -13,6 +14,17 @@ AWeaponBase::AWeaponBase()
 	bMagInserted = true;
 	bReloadOneBulletAtATime = false;
 	WeaponState = EWeaponState::EWS_Idle;
+}
+void AWeaponBase::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor)
+	{
+		AFPSPlayer* Player = Cast<AFPSPlayer>(OtherActor);
+		if (Player)
+		{
+			//Add weapon or ammo to player inventory
+		}
+	}
 }
 void AWeaponBase::FireGun()
 {
@@ -36,6 +48,7 @@ void AWeaponBase::StartReload()
 }
 void AWeaponBase::InsertMag()
 {
+	if (!Owner) return;
 	if (bReloadOneBulletAtATime)
 	{
 		if (CurrentRoundsInMagazine < MagazineSize)

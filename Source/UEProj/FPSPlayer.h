@@ -69,6 +69,8 @@ private:
 	bool bCrouched;
 	bool bCrouchButtonPressed;
 
+	bool bOverlapped;
+
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Movement,meta=(AllowPrivateAccess="true"))
 	float StandingCapsuleHalfHeight;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
@@ -107,7 +109,12 @@ private:
 	UCameraComponent* Camera;
 	
 	AWeaponBase* CurrentWeapon;
-	TArray<AWeaponBase*> WeaponsInReserve;
+	AWeaponBase* WeaponSlot1;
+	AWeaponBase* WeaponSlot2;
+	AWeaponBase* WeaponSlot3;
+	AWeaponBase* WeaponSlot4;
+
+	TMap<EAmmoType, int32> ReservedAmmo;
 
 public:	
 	// Called every frame
@@ -119,5 +126,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	void AddWeapon(AWeaponBase* Weapon, EWeaponType WeaponType);
 
 };

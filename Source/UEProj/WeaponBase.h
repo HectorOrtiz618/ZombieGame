@@ -10,6 +10,7 @@
 /**
  * 
  */
+class USphereComponent;
 class AFPSPlayer;
 class USoundCue;
 class UParticleSystem;
@@ -20,6 +21,11 @@ class UEPROJ_API AWeaponBase : public AItemBase
 	GENERATED_BODY()
 private:
 protected:
+	USphereComponent* PickupSphere;
+
+	UFUNCTION()
+	void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStats)
 	int32 MagazineSize;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStats)
@@ -63,5 +69,6 @@ public:
 	void CockGun();
 	FORCEINLINE const float GetMinAccuracy() { return MinAccuracy; };
 	FORCEINLINE const float GetMaxAccuracy() { return MaxAccuracy; };
+	FORCEINLINE const int32 GetCurrentRoundsInMag() { return CurrentRoundsInMagazine };
 	void SetOwner(AFPSPlayer* FPSPlayer);
 };
