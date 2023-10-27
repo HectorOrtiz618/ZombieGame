@@ -23,6 +23,7 @@ void AWeaponBase::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 		if (Player)
 		{
 			//Add weapon or ammo to player inventory
+			Player->AddWeapon(this);
 		}
 	}
 }
@@ -72,11 +73,22 @@ void AWeaponBase::InsertMag()
 		}
 	}
 }
-void AWeaponBase::CockGun() 
+void AWeaponBase::ReadyWeapon() 
 {
 	WeaponState = EWeaponState::EWS_Idle;
 }
-void AWeaponBase::SetOwner(AFPSPlayer* FPSPlayer)
+void AWeaponBase::HideWeapon(const bool bEnable)
+{
+	if(bEnable)
+	{
+		GunMesh->SetVisibility(false);
+	}
+	else
+	{
+		GunMesh->SetVisibility(false);
+	}
+}
+void AWeaponBase::SetWeaponOwner(AFPSPlayer* FPSPlayer)
 {
 	Owner = FPSPlayer;
 }

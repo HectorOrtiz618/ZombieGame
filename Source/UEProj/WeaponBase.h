@@ -14,7 +14,7 @@ class USphereComponent;
 class AFPSPlayer;
 class USoundCue;
 class UParticleSystem;
-class USkeletalMesh;
+class USkeletalMeshComponent;
 UCLASS()
 class UEPROJ_API AWeaponBase : public AItemBase
 {
@@ -33,9 +33,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStats)
 	int32 MaxRange;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStats)
-	USkeletalMesh* GunMesh;
+	USkeletalMeshComponent* GunMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStats)
+	EWeaponType WeaponType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStats)
 	EAmmoType AmmoType;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStats)
 	float TimeBetweenShots;
@@ -66,9 +69,12 @@ public:
 	void StartReload();
 	void UnloadMag();
 	void InsertMag();
-	void CockGun();
+	void ReadyWeapon();
 	FORCEINLINE const float GetMinAccuracy() { return MinAccuracy; };
 	FORCEINLINE const float GetMaxAccuracy() { return MaxAccuracy; };
-	FORCEINLINE const int32 GetCurrentRoundsInMag() { return CurrentRoundsInMagazine };
-	void SetOwner(AFPSPlayer* FPSPlayer);
+	FORCEINLINE const int32 GetCurrentRoundsInMag() { return CurrentRoundsInMagazine; };
+	FORCEINLINE const EAmmoType GetAmmoType() { return AmmoType; };
+	FORCEINLINE const EWeaponType GetWeaponType() { return WeaponType; };
+	void HideWeapon(const bool bEnable);
+	void SetWeaponOwner(AFPSPlayer* FPSPlayer);
 };

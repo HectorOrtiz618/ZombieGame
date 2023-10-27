@@ -24,6 +24,7 @@ UENUM(BlueprintType)
 enum class EWeaponState :uint8
 {
 	EWS_Idle UMETA(DisplayName = "Idle"),
+	EWS_Drawing UMETA(DisplayName = "Draw Weapon"),
 	EWS_Empty UMETA(DisplayName = "Empty"),
 	EWS_CycleRound UMETA(DisplayName = "Cycle Round"),
 	EWS_Reloading UMETA(DisplayName = "Reloading"),

@@ -107,6 +107,30 @@ void AFPSPlayer::UnCrouchPlayer(const FInputActionValue& Value)
 	//bCrouched = false;
 	bCrouchButtonPressed = false;
 }
+void AFPSPlayer::SwitchWeapon1()
+{
+	SwitchWeaponHelper(WeaponSlot1);
+}
+void AFPSPlayer::SwitchWeapon2()
+{
+	SwitchWeaponHelper(WeaponSlot2);
+}
+void AFPSPlayer::SwitchWeapon3()
+{
+	SwitchWeaponHelper(WeaponSlot3);
+}
+void AFPSPlayer::SwitchWeapon4()
+{
+	SwitchWeaponHelper(WeaponSlot4);
+}
+void AFPSPlayer::SwitchWeaponHelper(AWeaponBase* TargetSlot)
+{
+	if (!TargetSlot || (TargetSlot== CurrentWeapon )) return;
+	//hide currentweapon, switch weapon and enable its visibility
+	CurrentWeapon->HideWeapon(true);
+	CurrentWeapon = TargetSlot;
+	CurrentWeapon->HideWeapon(false);
+}
 void AFPSPlayer::InterpCrouch(float DeltaTime)
 {
 	if (bCrouchButtonPressed)
@@ -187,54 +211,41 @@ void AFPSPlayer::Attack()
 		DrawDebugLine(GetWorld(), Start, End, FColor::Emerald, false, 5.f);
 	}
 }
-void AFPSPlayer::AddWeapon(AWeaponBase* Weapon, EWeaponType WeaponType)
+void AFPSPlayer::AddWeapon(AWeaponBase* Weapon)
 {
 	//get weapon type and chek if it exist in inventory, if yess add it, if not add ammo
-	switch (WeaponType)
+	switch (Weapon->GetWeaponType())
 	{
 	case EWeaponType::EWT_Knife:
-		if (!WeaponSlot1)
-		{
-			WeaponSlot1 = Weapon;
-			CurrentWeapon = WeaponSlot1;
-		}
+		AddWeaponHelper(WeaponSlot1, Weapon);
 		break;
 	case EWeaponType::EWT_Pistol:
-		if (!WeaponSlot2)
-		{
-			WeaponSlot2 = Weapon;
-			CurrentWeapon = WeaponSlot2;
-		}
-		else
-		{
-			ReservedAmmo[EAmmoType::EAT_9MM] += Weapon->GetCurrentRoundsInMag();
-		}
+		AddWeaponHelper(WeaponSlot2, Weapon);
 		break;
 	case EWeaponType::EWT_PumpShotgun:
-		if (!WeaponSlot3)
-		{
-			WeaponSlot3 = Weapon;
-			CurrentWeapon = WeaponSlot3;
-		}
-		else
-		{
-			ReservedAmmo[EAmmoType::EAT_SHELLS] += Weapon->GetCurrentRoundsInMag();
-		}
+		AddWeaponHelper(WeaponSlot3, Weapon);
 		break;
 	case EWeaponType::EWT_Rifle:
-		if (!WeaponSlot4)
-		{
-			WeaponSlot4 = Weapon;
-			CurrentWeapon = WeaponSlot4;
-		}
-		else
-		{
-			ReservedAmmo[EAmmoType::EAT_AR] += Weapon->GetCurrentRoundsInMag();
-		}
+		AddWeaponHelper(WeaponSlot4, Weapon);
 		break;
 	default:
 		break;
 
+	}
+}
+void AFPSPlayer::AddWeaponHelper(AWeaponBase* TargetSlot, AWeaponBase* WeaponToAdd)
+{
+	if (!TargetSlot)
+	{
+		WeaponSlot4 = WeaponToAdd;
+		CurrentWeapon = TargetSlot;
+	}
+	else
+	{
+		if (WeaponToAdd->GetWeaponType() != EWeaponType::EWT_Knife)
+		{
+			ReservedAmmo[WeaponToAdd->GetAmmoType()] += WeaponToAdd->GetCurrentRoundsInMag();
+		}
 	}
 }
 
@@ -258,6 +269,10 @@ void AFPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		Input->BindAction(MovementAction, ETriggerEvent::Triggered, this, &AFPSPlayer::Move);
 		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFPSPlayer::LookAround);
 		Input->BindAction(PrimaryAttackAction, ETriggerEvent::Triggered, this, &AFPSPlayer::Attack);
+		Input->BindAction(SelectSlot1, ETriggerEvent::Triggered, this, &AFPSPlayer::SwitchWeapon1);
+		Input->BindAction(SelectSlot1, ETriggerEvent::Triggered, this, &AFPSPlayer::SwitchWeapon2);
+		Input->BindAction(SelectSlot1, ETriggerEvent::Triggered, this, &AFPSPlayer::SwitchWeapon3);
+		Input->BindAction(SelectSlot1, ETriggerEvent::Triggered, this, &AFPSPlayer::SwitchWeapon4);
 
 		Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		Input->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);

@@ -8,7 +8,7 @@
 #include "FPSPlayer.generated.h"
 
 
-class USkeletalMeshCompoennt;
+class USkeletalMeshComponent;
 class UInputMappingContext;
 class UInputComponent;
 class UInputAction;
@@ -45,16 +45,28 @@ protected:
 	UInputAction* CrouchAction;
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* PrimaryAttackAction;
-	TMap<EAmmoType, int32> ReservedAmmo;
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* SelectSlot1;
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* SelectSlot2;
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* SelectSlot3;
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* SelectSlot4;
 	//Player ACtions
 	void Move(const FInputActionValue& Value);
 	void Reload();
 	void LookAround(const FInputActionValue& Value);
 	void CrouchPlayer(const FInputActionValue& Value);
 	void UnCrouchPlayer(const FInputActionValue& Value);
+	void SwitchWeapon1();
+	void SwitchWeapon2();
+	void SwitchWeapon3();
+	void SwitchWeapon4();
+	void SwitchWeaponHelper(AWeaponBase *TargetSlot);
 
 	void InterpCrouch(float DeltaTime);
-
+	void AddWeaponHelper(AWeaponBase* TargetSlot, AWeaponBase *WeaponToAdd);
 	//Helper function to determine if we have enough room to stand up;
 	bool StandingHeightBlocked();
 	void Attack();
@@ -114,6 +126,7 @@ private:
 	AWeaponBase* WeaponSlot3;
 	AWeaponBase* WeaponSlot4;
 
+	UPROPERTY(EditAnywhere, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	TMap<EAmmoType, int32> ReservedAmmo;
 
 public:	
@@ -126,6 +139,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	void AddWeapon(AWeaponBase* Weapon, EWeaponType WeaponType);
+	void AddWeapon(AWeaponBase* Weapon);
 
 };
