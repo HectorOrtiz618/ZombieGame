@@ -40,14 +40,17 @@ protected:
 	USkeletalMeshComponent* EnemyMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat", META = (AllowPrivateAccess = "true"))
-	UBoxComponent* HitBox;
+	UBoxComponent* LeftArmHitBox;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat", META = (AllowPrivateAccess = "true"))
+	UBoxComponent* RightArmHitBox;
+
 	AEnemyController* EnemyController;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", META = (AllowPrivateAccess = "true"))
 	bool bIsHurt;
 
 	void PlayMontage(FName MontageName);
-	void EnableMeleeHitBox();
-	void DisableMeleeHitBox();
+	void EnableMeleeHitBox(UBoxComponent* HitBoxToEnable);
+	void DisableMeleeHitBox(UBoxComponent* HitBoxToDisable);
 	void Die();
 	void SpawnRagdoll();
 private:

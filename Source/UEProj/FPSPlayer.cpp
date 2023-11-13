@@ -130,6 +130,7 @@ void AFPSPlayer::SwitchWeaponHelper(AWeaponBase* TargetSlot)
 	CurrentWeapon->HideWeapon(true);
 	CurrentWeapon = TargetSlot;
 	CurrentWeapon->HideWeapon(false);
+	//TODO: Draw anims
 }
 void AFPSPlayer::InterpCrouch(float DeltaTime)
 {

@@ -40,6 +40,8 @@ void AWeaponBase::FireGun()
 void AWeaponBase::UnloadMag()
 {
 	//TODO: Give remainging rounds to owner and delet rounds in mag
+	if (!Owner) return;
+	Owner->SetAmmoInReserve(CurrentRoundsInMagazine, AmmoType);
 	CurrentRoundsInMagazine = 0;
 }
 void AWeaponBase::StartReload()

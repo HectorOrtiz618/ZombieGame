@@ -135,7 +135,8 @@ public:
 
 	FORCEINLINE int32 GetHealth()const { return Health; }
 	FORCEINLINE int32 GetMaxHealth()const { return MaxHealth; }
-	FORCEINLINE void SetAmmoInReserve(const int32 Ammo) {};
+	FORCEINLINE void SetAmmoInReserve(const int32 Ammo, const EAmmoType AmmoType) { ReservedAmmo.Add(AmmoType, Ammo); }
+	FORCEINLINE AWeaponBase* GetCurrentWeapon()const { return CurrentWeapon; }
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
